@@ -6,11 +6,22 @@ module "cloud-nat" {
   project_id   = var.project_id
 }
 
+module "gh-storage"{
+  source       = "./modules/gh-storage"
+ project_id = var.project_id
+}
+
+module "docker-registry"{
+  source       = "./modules/docker-registry"
+  region = var.region
+  project_id = var.project_id
+}
+
 resource "google_container_cluster" "primary" {
   project            = var.project_id
   name               = "nat-cluster"
   location           = var.zone
-  initial_node_count = 4
+  initial_node_count = 1
   network            = module.cloud-nat.network.id
   subnetwork         = module.cloud-nat.subnet.id
 
@@ -26,7 +37,7 @@ resource "google_container_cluster" "primary" {
   }
 
   ip_allocation_policy {
-    cluster_ipv4_cidr_block  = "10.0.32.0/20"
+    cluster_ipv4_cidr_block = "10.0.32.0/20"
   }
 
   master_authorized_networks_config {

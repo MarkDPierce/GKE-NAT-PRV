@@ -19,8 +19,7 @@ variable "subnet_name" {
 }
 
 variable "credentials" {
-  type        = string
-  description = ""
+  type = string
 }
 
 variable "workcidr" {
